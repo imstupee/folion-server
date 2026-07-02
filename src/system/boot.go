@@ -32,5 +32,6 @@ func BootFolion() {
 	if err := instance.StartFolionServer(); err != nil {
 		slog.Error(err.Error())
 	}
+	slog.Debug("Started Folion!")
 
 }

@@ -11,7 +11,7 @@ import (
 type Config struct {
 	DeveloperMode bool   `yaml:"devmode"`
 	Address       string `yaml:"address"`
-	Port          int    `yaml:"port"`
+	Port          string `yaml:"port"`
 }
 
 func LoadConfig() (*Config, error) {
