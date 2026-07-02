@@ -10,6 +10,7 @@ type FolionError struct {
 	Code    ErrorCode
 	Severe  bool
 	Message string
+	Err     error
 }
 
 func NewFolionError(_code ErrorCode, _message string, _severe bool) *FolionError {
@@ -22,6 +23,14 @@ func NewFolionError(_code ErrorCode, _message string, _severe bool) *FolionError
 
 func (err *FolionError) Error() string {
 	return fmt.Sprintf("Error [%s]", err.Code)
+}
+
+func (err *FolionError) Wrap(_error error) {
+	err.Err = _error
+}
+
+func (err *FolionError) Unwrap() error {
+	return err.Err
 }
 
 const (
