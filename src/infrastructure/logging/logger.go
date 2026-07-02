@@ -1,0 +1,27 @@
+package logging
+
+import (
+	"log/slog"
+	"os"
+)
+
+var DEBUG = true
+
+func InitLogger() error {
+	var handler slog.Handler
+
+	if DEBUG == true {
+		handler = slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		})
+	}
+
+	logger := slog.New(handler)
+	slog.SetDefault(logger)
+
+	return nil
+}
+
+func SaveCrashReport() {
+
+}
