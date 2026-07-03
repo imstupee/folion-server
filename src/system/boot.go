@@ -21,6 +21,7 @@ func BootFolion() {
 	})
 
 	requestQueue := requests.NewRequestQueue(config.GetInstance().MaxWorkers)
+	requestQueue.Run()
 
 	connectionHandler := network.NewConnectionHandler(config.GetInstance().Address,
 		config.GetInstance().Port, requestQueue)
