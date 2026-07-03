@@ -61,6 +61,7 @@ func NewWorker(workerPool chan chan Request) *Worker {
 
 func (worker *Worker) Start() {
 	go func() {
+		slog.Debug("Worker started!")
 		for {
 			worker.WorkerPool <- worker.RequestChannel
 
@@ -99,8 +100,10 @@ func NewRequestQueue(maxWorkers int) *RequestQueue {
 }
 
 func (requestQueue *RequestQueue) Run() {
+	slog.Debug("Starting Request queue")
 	for i := 0; i < requestQueue.MaxWorkers; i++ {
 		worker := NewWorker(requestQueue.WorkerPool)
+		slog.Debug(fmt.Sprintf("Created worker %d", i))
 		worker.Start()
 	}
 
@@ -109,6 +112,7 @@ func (requestQueue *RequestQueue) Run() {
 
 func (requestQueue RequestQueue) process() {
 	for {
+		slog.Debug("Started processing Request queue")
 		select {
 		case request := <-RequestQueueChan:
 			go func(request Request) {
