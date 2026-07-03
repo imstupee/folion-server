@@ -3,35 +3,34 @@ package system
 import (
 	"folion-server/src/infrastructure/logging"
 	"folion-server/src/network"
+	"folion-server/src/system/config"
+	"folion-server/src/system/x"
 	"log/slog"
-	"os"
 )
 
 func BootFolion() {
-	err := logging.InitLogger()
-	if err != nil {
-		os.Stdout.WriteString("Failed to start logger. Exiting.")
-		os.Exit(1)
-	}
+	x.Cautious(func() error {
+		return logging.InitLogger()
+	})
+
 	slog.Debug("Started logging")
 
-	config, err := LoadConfig()
+	x.Cautious(func() error {
+		return config.LoadConfig()
+	})
 
-	if err != nil {
-		slog.Error(err.Error())
-		os.Exit(1)
-	}
-
-	connectionHandler := network.NewConnectionHandler(config.Address, config.Port)
+	connectionHandler := network.NewConnectionHandler(config.GetInstance().Address,
+		config.GetInstance().Port)
 
 	instance := NewFolionInstance(
-		config,
+		config.GetInstance(),
 		connectionHandler,
 	)
 
-	if err := instance.StartFolionServer(); err != nil {
-		slog.Error(err.Error())
-	}
+	x.Cautious(func() error {
+		return instance.StartFolionServer()
+	})
+
 	slog.Debug("Started Folion!")
 
 }

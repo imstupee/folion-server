@@ -35,13 +35,12 @@ func (connectionHandler *ConnectionHandler) StartConnectionHandler() error {
 		if err != nil {
 			return err
 		}
-
-		go connectionHandler.HandlerConnection(&connection)
+		slog.Debug(fmt.Sprintf("Got connections from %s", connection.RemoteAddr()))
+		go connectionHandler.HandleConnection(connection)
 	}
-
-	return nil
 }
 
-func (connectionHandler *ConnectionHandler) HandlerConnection(connection *net.Conn) error {
+func (connectionHandler *ConnectionHandler) HandleConnection(connection net.Conn) error {
+	defer connection.Close()
 	return nil
 }

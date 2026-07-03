@@ -7,6 +7,22 @@ import (
 
 var DEBUG = true
 
+type Logger struct {
+	History []string
+}
+
+var (
+	instance *Logger = nil
+)
+
+func GetInstance() *Logger {
+	if instance != nil {
+		return instance
+	} else {
+		return nil
+	}
+}
+
 func InitLogger() error {
 	var handler slog.Handler
 
