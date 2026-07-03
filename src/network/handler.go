@@ -28,7 +28,7 @@ func (connectionHandler *ConnectionHandler) StartConnectionHandler() error {
 		return err
 	}
 	defer socket.Close()
-	slog.Debug(fmt.Sprintf("Started Connection handler on %s:%s", addr, connectionHandler.port))
+	slog.Debug(fmt.Sprintf("Started Connection handler on %s:%s", socket.Addr(), connectionHandler.port))
 
 	for {
 		connection, err := socket.Accept()
