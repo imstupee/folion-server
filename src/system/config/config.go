@@ -45,6 +45,7 @@ func LoadConfig() error {
 		return x.ErrConfigLoadFailed.Wrap(err)
 	}
 
+	instance = &config
 	return nil
 }
 
