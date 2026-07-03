@@ -9,14 +9,20 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const defaults = ""
-
 var instance *Config = nil
 
 type Config struct {
 	DeveloperMode bool   `yaml:"devmode"`
 	Address       string `yaml:"address"`
 	Port          string `yaml:"port"`
+	MaxWorkers    int    `yaml:"max_workers"`
+}
+
+var defaultConfig Config = Config{
+	DeveloperMode: false,
+	Address:       "127.0.0.1",
+	Port:          "8080",
+	MaxWorkers:    5,
 }
 
 func GetInstance() *Config {

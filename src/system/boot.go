@@ -3,6 +3,7 @@ package system
 import (
 	"folion-server/src/infrastructure/logging"
 	"folion-server/src/network"
+	"folion-server/src/network/requests"
 	"folion-server/src/system/config"
 	"folion-server/src/system/x"
 	"log/slog"
@@ -19,8 +20,10 @@ func BootFolion() {
 		return config.LoadConfig()
 	})
 
+	requestQueue := requests.NewRequestQueue(config.GetInstance().MaxWorkers)
+
 	connectionHandler := network.NewConnectionHandler(config.GetInstance().Address,
-		config.GetInstance().Port)
+		config.GetInstance().Port, requestQueue)
 
 	instance := NewFolionInstance(
 		config.GetInstance(),
