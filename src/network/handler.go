@@ -59,6 +59,8 @@ func (connectionHandler *ConnectionHandler) HandleConnection(connection net.Conn
 			fmt.Sprintf("Failed to decode request from %s", connection.RemoteAddr())).Wrap(err)
 	}
 
+	slog.Debug(request.Type)
+
 	go func() {
 		requests.RequestQueueChan <- request
 	}()
