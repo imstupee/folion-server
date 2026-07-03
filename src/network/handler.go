@@ -1,20 +1,25 @@
 package network
 
 import (
+	"encoding/json"
 	"fmt"
+	"folion-server/src/network/requests"
+	"folion-server/src/system/x"
 	"log/slog"
 	"net"
 )
 
 type ConnectionHandler struct {
-	address string
-	port    string
+	address      string
+	port         string
+	requestQueue *requests.RequestQueue
 }
 
-func NewConnectionHandler(_address string, _port string) *ConnectionHandler {
+func NewConnectionHandler(_address string, _port string, _requestQueue *requests.RequestQueue) *ConnectionHandler {
 	return &ConnectionHandler{
-		address: _address,
-		port:    _port,
+		address:      _address,
+		port:         _port,
+		requestQueue: _requestQueue,
 	}
 }
 
@@ -40,7 +45,23 @@ func (connectionHandler *ConnectionHandler) StartConnectionHandler() error {
 	}
 }
 
+func (connectionHandler *ConnectionHandler) registerSession(connection net.Conn) {
+
+}
+
 func (connectionHandler *ConnectionHandler) HandleConnection(connection net.Conn) error {
 	defer connection.Close()
+	decoder := json.NewDecoder(connection)
+
+	var request requests.Request
+	if err := decoder.Decode(&request); err != nil {
+		return x.ErrRequestDecodeFailed.Message(
+			fmt.Sprintf("Failed to decode request from %s", connection.RemoteAddr())).Wrap(err)
+	}
+
+	go func() {
+		requests.RequestQueueChan <- request
+	}()
+
 	return nil
 }
