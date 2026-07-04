@@ -61,9 +61,9 @@ func (connectionHandler *ConnectionHandler) HandleConnection(connection net.Conn
 
 	slog.Debug(request.Type)
 
-	go func() {
+	go func(request requests.Request) {
 		requests.RequestQueueChan <- request
-	}()
+	}(request)
 
 	return nil
 }
