@@ -84,7 +84,7 @@ func (worker *Worker) Stop() {
 	}()
 }
 
-var RequestQueueChan chan Request
+var RequestQueueChan chan Request = make(chan Request)
 
 type RequestQueue struct {
 	MaxWorkers int
