@@ -115,6 +115,7 @@ func (requestQueue RequestQueue) process() {
 		slog.Debug("Started processing Request queue")
 		select {
 		case request := <-RequestQueueChan:
+			slog.Debug(fmt.Sprintf("Request queue got new request type: %s", request.Type))
 			go func(request Request) {
 				requestChannel := <-requestQueue.WorkerPool
 				requestChannel <- request
