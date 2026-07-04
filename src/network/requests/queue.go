@@ -113,13 +113,11 @@ func (requestQueue *RequestQueue) Run() {
 func (requestQueue RequestQueue) process() {
 	for {
 		slog.Debug("Started processing Request queue")
-		select {
-		case request := <-RequestQueueChan:
-			slog.Debug(fmt.Sprintf("Request queue got new request type: %s", request.Type))
-			go func(request Request) {
-				requestChannel := <-requestQueue.WorkerPool
-				requestChannel <- request
-			}(request)
-		}
+		request := <-RequestQueueChan
+		slog.Debug(fmt.Sprintf("Request queue got new request type: %s", request.Type))
+		go func(request Request) {
+			availableWorker := <-requestQueue.WorkerPool
+			availableWorker <- request
+		}(request)
 	}
 }
